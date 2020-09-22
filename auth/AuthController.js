@@ -21,7 +21,7 @@ router.post('/login', function (req, res) {
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
     var testPassword = "$2y$08$nOo2//CFeWvM1X54VV8G1.9s2MvnKHoM9nK9Dx33jtR2uqqtXmfN.";
     var testLogin = "test";
-
+    console.log(req);
     var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
     if (!passwordIsValid || testLogin!=req.body.login) return res.status(401).send({auth: false, token: null});
 
