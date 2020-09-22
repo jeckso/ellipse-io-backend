@@ -18,10 +18,10 @@ var config = require('../config'); // get config file
 router.post('/login', function (req, res) {
     req.header("Access-Control-Allow-Origin", "*");
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-    var testPassword = "$2y$08$nOo2//CFeWvM1X54VV8G1.9s2MvnKHoM9nK9Dx33jtR2uqqtXmfN.";
+
+    var testPassword = "$2a$08$8GiRharrz4xN8ekyfmkMSehJ.4Bgio2HqSIO0cFW1S6h.d5lZQv9a";
     var testLogin = "test";
-    console.log(req);
+ //   console.log(hashedPassword);
     var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
     if (!passwordIsValid || testLogin!=req.body.login) return res.status(401).send({auth: false, token: null});
 
