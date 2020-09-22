@@ -23,7 +23,7 @@ router.post('/login', function (req, res) {
     var testLogin = "test";
  //   console.log(hashedPassword);
     var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
-    if (!passwordIsValid || testLogin!=req.body.login) return res.status(401).send({auth: false, token: null});
+    if (!passwordIsValid || testLogin!=req.body.username) return res.status(401).send({auth: false, token: null});
 
     var token = jwt.sign({id: "0665460900"}, config.secret, {
         expiresIn: 86400 // expires in 24 hours
