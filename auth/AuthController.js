@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 var VerifyToken = require('./VerifyToken');
@@ -15,6 +16,7 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
+app.options('*', cors());
 router.post('/login', function (req, res) {
     req.header("Access-Control-Allow-Origin", "*");
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
