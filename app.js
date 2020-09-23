@@ -16,7 +16,7 @@ app.use(cors())
 app.use(bodyparser.urlencoded({ extended: false }))
 
 app.use(bodyparser.json())
-
+app.options('*', cors());
 
 app.use('/auth', authRouter);
 

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+var cors = require('cors');
 var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 var VerifyToken = require('./VerifyToken');
