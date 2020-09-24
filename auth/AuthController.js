@@ -23,12 +23,12 @@ router.post('/login', function (req, res) {
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
 
     var testPassword = "$2a$08$8GiRharrz4xN8ekyfmkMSehJ.4Bgio2HqSIO0cFW1S6h.d5lZQv9a";
-    var testLogin = "test";
- //   console.log(hashedPassword);
+    var testLogin = "+380997099357";
+  // console.log(hashedPassword);
     var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
     if (!passwordIsValid || testLogin!=req.body.username) return res.status(401).send({auth: false, token: null});
 
-    var token = jwt.sign({id: "0665460900"}, config.secret, {
+    var token = jwt.sign({id: "+380997099357"}, config.secret, {
         expiresIn: 86400 // expires in 24 hours
     });
 
