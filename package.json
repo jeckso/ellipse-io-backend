@@ -6,6 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "0.7.12",
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
@@ -16,6 +17,7 @@
     "generic-pool": "^3.7.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "pug": "2.0.0-beta11"

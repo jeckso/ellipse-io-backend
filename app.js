@@ -7,9 +7,11 @@ const pool = require('generic-pool');;
 var logger = require('morgan');
 const bodyparser = require('body-parser');
 
-
+var mongoose = require('mongoose');
 var authRouter = require('./auth/AuthController');
-
+var db = require('./config/db');
+console.log("connecting--",db);
+mongoose.connect(db.url); //Mongoose connection created
 var app = express();
 app.use(cors())
 //var mysql = require("mysql");
