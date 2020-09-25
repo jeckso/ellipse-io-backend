@@ -9,30 +9,38 @@ var mysql = require('../database');
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
-
+const users = require('../controllers/user');
 /**
  * Configure JWT
  */
+var User = require('../models/user');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
 app.options('*', cors());
 router.post('/login', function (req, res) {
-    req.header("Access-Control-Allow-Origin", "*");
-    req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+  //   req.header("Access-Control-Allow-Origin", "*");
+  //   req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+  //
+  //   var testPassword = "$2a$08$8GiRharrz4xN8ekyfmkMSehJ.4Bgio2HqSIO0cFW1S6h.d5lZQv9a";
+  //   var testLogin = "+380997099357";
+  // // console.log(hashedPassword);
+  //    var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
+  //   if (!passwordIsValid || testLogin!=req.body.username) return res.status(401).send({auth: false, token: null});
 
-    var testPassword = "$2a$08$8GiRharrz4xN8ekyfmkMSehJ.4Bgio2HqSIO0cFW1S6h.d5lZQv9a";
-    var testLogin = "+380997099357";
-  // console.log(hashedPassword);
-    var passwordIsValid = bcrypt.compareSync(req.body.password, testPassword);
-    if (!passwordIsValid || testLogin!=req.body.username) return res.status(401).send({auth: false, token: null});
+    users.loginUsers(req,res);
 
-    var token = jwt.sign({id: "+380997099357"}, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-    });
+    //     var token = jwt.sign({username: req.body.username}, config.secret, {
+    //         expiresIn: 86400 // expires in 24 hours
+    //     });
+    //
+    //   return  res.status(200).send({auth: true, token: token});
+    // }
+    //
+    //  return res.status(401).send({auth: false, token: null});
 
-    res.status(200).send({auth: true, token: token});
+
 
     // User.findOne({ email: req.body.email }, function (err, user) {
     //     if (err) return res.status(500).send('Error on the server.');
@@ -63,7 +71,8 @@ router.post('/register', function (req, res) {
     req.header("Access-Control-Allow-Origin", "*");
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-    res.status(200).send({  registered: true } );
+    users.postUsers(req,res);
+   // res.status(200).send({  registered: true } );
 
 });
 
