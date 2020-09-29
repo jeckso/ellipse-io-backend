@@ -33,8 +33,8 @@ exports.loginUsers = function(req, res) {
 
 
                 if (err) { return res.status(500).send(err); }
-// Password did not match
-                if (!passwordIsValid) { return res.status(500).send("Wrong password");   }
+// Password did not matchs
+                if (!passwordIsValid) { return res.status(401).send("Wrong password");   }
 
                 // Success
                 var token = jwt.sign({username: req.body.username}, config.secret, {
