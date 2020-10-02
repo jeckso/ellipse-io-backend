@@ -1,7 +1,7 @@
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('../config'); // get our config file
-
-function verifyToken(req, res, next) {
+var Admin = require('../models/admin');
+function AdminVerify(req, res, next) {
 
     // check header or url parameters or post parameters for token
     let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
@@ -18,7 +18,16 @@ function verifyToken(req, res, next) {
     jwt.verify(token, config.secret, function(err, decoded) {
         if (err)
             return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+        Admin.find({"username":decoded.username}, function (err, admin) {
 
+            if (err) {
+                return res.status(500).send(err);
+            } else if (admin[0] == null) {
+                console.log("nenahod");
+                return res.status(401).send({auth: false, token: null});
+                // return false;
+            }
+        });
         // if everything is good, save to request for use in other routes
         req.body.decoded = decoded.username;
         next();
@@ -26,4 +35,4 @@ function verifyToken(req, res, next) {
 
 }
 
-module.exports = verifyToken;
+module.exports = AdminVerify;

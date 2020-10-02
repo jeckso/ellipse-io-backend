@@ -3,6 +3,7 @@ var config = require('../config'); // get config file
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
+var Note = require('../models/note');
 // module.exports.getByUserId = (req, res) => {
 //     Order.find()
 //         .select()
@@ -51,6 +52,35 @@ exports.loginUsers = function(req, res) {
     });
 
 };
+exports.createNote = function(req, res){
+    //User.findOneAndUpdate
+
+    User.findOne({"username":req.body.decoded}, 'notes',function (err, user){
+console.log(user);
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+            var note = new Note({
+                id : req.body.id,
+                title : req.body.title,
+                content : req.body.content,
+                createDate : req.body.createDate,
+                updateDate : req.body.updateDate
+            });
+            user.notes.push(note);
+            user.save(function(err) {
+                if (err)
+                    return res.send(err);
+
+                res.status(200).json({ message: 'Note added! ' });
+            });
+        }
+
+    });
+
+}
 //exports.createUser = function(req,res)
 // Create endpoint /auth/register for POST
 exports.postUsers = function(req, res) {
@@ -59,6 +89,7 @@ exports.postUsers = function(req, res) {
         if (err) {
             return res.status(500).send(err);
         }
+
         else if(user[0] == null) {
             var user = new User({
                 username: req.body.username,

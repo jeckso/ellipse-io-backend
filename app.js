@@ -9,6 +9,8 @@ const bodyparser = require('body-parser');
 
 var mongoose = require('mongoose');
 var authRouter = require('./auth/AuthController');
+var userRouter = require('./routes/user');
+var adminRouter = require('./routes/admin');
 var db = require('./config/db');
 console.log("connecting--",db);
 mongoose.connect(db.url); //Mongoose connection created
@@ -22,7 +24,8 @@ app.options('*', cors());
 
 
 app.use('/auth', authRouter);
-
+app.use('/user', userRouter);
+app.use('/admin', adminRouter);
 //var mysqlConnection = mysql.createConnection('mysql://b3020c234f7bf9:c2f9aeec@eu-cdbr-west-02.cleardb.net/heroku_a055cf7e4179e62?reconnect=true');
   //  mysqlConnection.connect();
 
