@@ -21,5 +21,11 @@ app.options('*', cors());
 router.post('/note', VerifyToken, function (req, res) {
 users.createNote(req,res);
 });
+router.get('/note', VerifyToken, function (req, res) {
+    users.getNotes(req,res);
+});
+router.patch('/note/:id', VerifyToken, function (req, res) {
+    users.updateNote(req,res);
+});
 
 module.exports = router;

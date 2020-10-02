@@ -52,6 +52,56 @@ exports.loginUsers = function(req, res) {
     });
 
 };
+exports.getNotes = function(req, res){
+    //User.findOneAndUpdate
+
+    User.find({"username":req.body.decoded}, 'notes',function (err, user){
+
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+
+            res.status(200).json(user[0].notes);
+        }
+
+    });
+
+}
+exports.updateNote = function(req, res){
+    //User.findOneAndUpdate
+   var id =  req.query.id;
+
+    User.findOne({"username":req.body.decoded}, 'notes',function (err, user){
+        //console.log(user);
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+            var note = user.notes._id(id);
+            console.log(note);
+
+            // var note = new Note({
+            //     title : req.body.title,
+            //     content : req.body.content,
+            //     createDate : req.body.createDate,
+            //     updateDate : req.body.updateDate
+            // });
+            user.notes.push(note);
+            user.save(function(err) {
+                if (err)
+                    return res.send(err);
+
+                res.status(200).json({ message: 'Note added! ' });
+            });
+        }
+
+    });
+
+}
+
 exports.createNote = function(req, res){
     //User.findOneAndUpdate
 
