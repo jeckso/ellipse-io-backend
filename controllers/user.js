@@ -123,7 +123,7 @@ console.log(user);
                 if (err)
                     return res.send(err);
 
-                res.status(200).json({ message: 'Note added! ' });
+                res.status(200).json(note);
             });
         }
 
