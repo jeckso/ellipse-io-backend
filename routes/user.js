@@ -21,7 +21,7 @@ app.options('*', cors());
 router.post('/notes', VerifyToken, function (req, res) {
     if(req.body.title = ""){
 
-            return res.status(500).json({message : "No title!"});
+            return res.status(400).json({message : "No title!"});
 
     }
 else{
