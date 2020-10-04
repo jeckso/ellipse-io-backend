@@ -18,6 +18,7 @@ var Note = require('../models/note');
 //         });
 // };
 exports.loginUsers = function(req, res) {
+
     User.find({"username":req.body.username}, function (err, user){
 
         if (err) {
@@ -71,30 +72,28 @@ exports.getNotes = function(req, res){
 }
 exports.updateNote = function(req, res){
     //User.findOneAndUpdate
-   var id =  req.query.id;
+   var id =  req.params.id;
 
-    User.findOne({"username":req.body.decoded}, 'notes',function (err, user){
-        //console.log(user);
+    User.findOne({"username":req.body.decoded, "notes._id" : id}, 'notes',function (err, user){
+        console.log(req.body);
         if (err) {
             return res.status(500).send(err);
         }
 
         else  {
-            var note = user.notes._id(id);
+            var note  = user.notes.id(id);
             console.log(note);
 
-            // var note = new Note({
-            //     title : req.body.title,
-            //     content : req.body.content,
-            //     createDate : req.body.createDate,
-            //     updateDate : req.body.updateDate
-            // });
-            user.notes.push(note);
+            note.title = req.body.title;
+            note.content = req.body.content;
+            note.updateDate = new Date();
+
+
             user.save(function(err) {
                 if (err)
                     return res.send(err);
 
-                res.status(200).json({ message: 'Note added! ' });
+                res.status(200).json({ message: 'Note modified! ' });
             });
         }
 

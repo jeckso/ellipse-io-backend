@@ -18,13 +18,13 @@ var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
 app.options('*', cors());
-router.post('/note', VerifyToken, function (req, res) {
+router.post('/notes', VerifyToken, function (req, res) {
 users.createNote(req,res);
 });
-router.get('/note', VerifyToken, function (req, res) {
+router.get('/notes', VerifyToken, function (req, res) {
     users.getNotes(req,res);
 });
-router.patch('/note/:id', VerifyToken, function (req, res) {
+router.patch('/notes/:id', VerifyToken, function (req, res) {
     users.updateNote(req,res);
 });
 
