@@ -19,10 +19,29 @@ var config = require('../config'); // get config file
 
 app.options('*', cors());
 router.post('/notes', VerifyToken, function (req, res) {
-users.createNote(req,res);
+    if(req.body.title = ""){
+
+            return res.status(500).json({message : "No title!"});
+
+    }
+else{
+        users.createNote(req,res);
+    }
+
 });
+function isEmptyObject(obj) {
+    return !Object.keys(obj).length;
+}
+
 router.get('/notes', VerifyToken, function (req, res) {
-    users.getNotes(req,res);
+    console.log(req.query)
+    if(isEmptyObject(req.query)){ console.log("nety"); users.getNotes(req,res);
+    }
+    else{
+        console.log("est");
+    }
+
+
 });
 router.patch('/notes/:id', VerifyToken, function (req, res) {
     users.updateNote(req,res);
