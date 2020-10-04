@@ -19,7 +19,7 @@ var config = require('../config'); // get config file
 
 app.options('*', cors());
 router.post('/notes', VerifyToken, function (req, res) {
-    if(req.body.title = ""){
+    if(req.body.title === ""){
 
             return res.status(400).json({message : "No title!"});
 
@@ -44,7 +44,7 @@ router.get('/notes', VerifyToken, function (req, res) {
 
 });
 router.patch('/notes/:id', VerifyToken, function (req, res) {
-    if(req.body.title = ""){
+    if(req.body.title === ""){
 
         return res.status(400).json({message : "No title!"});
 
