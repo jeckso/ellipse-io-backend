@@ -93,7 +93,7 @@ exports.updateNote = function(req, res){
                 if (err)
                     return res.send(err);
 
-                res.status(200).json({ message: 'Note modified! ' });
+                res.status(200).json(note);
             });
         }
 
