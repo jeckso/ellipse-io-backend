@@ -75,6 +75,7 @@ exports.updateNote = function(req, res){
    var id =  req.params.id;
 
     User.findOne({"username":req.body.decoded, "notes._id" : id}, 'notes',function (err, user){
+        console.log("gay")
         console.log(req.body);
         if (err) {
             return res.status(500).send(err);
