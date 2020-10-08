@@ -4,6 +4,8 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
 var Note = require('../models/note');
+const sortArray = require('sort-array');
+const paginate = require("paginate-array");
 // module.exports.getByUserId = (req, res) => {
 //     Order.find()
 //         .select()
@@ -68,6 +70,57 @@ exports.getNotes = function(req, res){
         }
 
     });
+
+}
+function Arrpaginate(array, page_size, page_number) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+exports.getPaginate = function(req,res){
+    const options ={
+        offset : req.query.offset,
+        limit : req.query.count,
+        sort : req.query.orderBy,
+
+    }
+    User.find({"username":req.body.decoded}, 'notes',function (err, user){
+
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+
+            var pageNumber = options.offset/options.limit+1;
+            var numItemsPerPage = options.limit;
+            const jsArray = user[0].notes.toObject();
+           // console.log(jsArray);
+        const result = Arrpaginate(jsArray,numItemsPerPage,pageNumber);
+            res.status(200).json(sortArray(result,{ by: 'createDate',
+                order: options.sort}));
+        }
+
+    });
+    // User.find({"username":req.body.decoded}, 'notes',function (err, user){
+    //
+    //     if (err) {
+    //         return res.status(500).send(err);
+    //     }
+    //
+    //     else  {
+    //
+    //         var myAggregate = User.aggregate([ { $unwind: "$notes" }, { $limit : 5 } ]);
+    //         User.aggregatePaginate(myAggregate, options).then(function(results){
+    //             console.log(results);
+    //             res.status(200).json(results);
+    //         }).catch(function(err){
+    //             console.log(err);
+    //         })
+    //
+    //     }
+    //
+    // });
+
 
 }
 exports.updateNote = function(req, res){
