@@ -35,9 +35,10 @@ function isEmptyObject(obj) {
 
 router.get('/notes', VerifyToken, function (req, res) {
     console.log(req.query)
-    if(isEmptyObject(req.query)){ console.log("nety"); users.getNotes(req,res);
+    if(isEmptyObject(req.query)){ users.getNotes(req,res);
     }
     else{
+        users.getPaginate(req,res);
         console.log("est");
     }
 
