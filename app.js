@@ -6,7 +6,7 @@ var cors = require('cors');
 const pool = require('generic-pool');;
 var logger = require('morgan');
 const bodyparser = require('body-parser');
-
+const WebSocket = require('ws'); // new
 var mongoose = require('mongoose');
 var authRouter = require('./auth/AuthController');
 var userRouter = require('./routes/user');
@@ -28,7 +28,17 @@ app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 //var mysqlConnection = mysql.createConnection('mysql://b3020c234f7bf9:c2f9aeec@eu-cdbr-west-02.cleardb.net/heroku_a055cf7e4179e62?reconnect=true');
   //  mysqlConnection.connect();
-
+// const socketServer = new WebSocket.Server({
+//     port: 3030});
+// socketServer.on('connection', (socketClient) => {
+//     console.log('connected');
+//     socketClient.send("PIDOR");
+//     console.log('client Set length: ', socketServer.clients.size);
+//     socketClient.on('close', (socketClient) => {
+//         console.log('closed');
+//         console.log('Number of clients: ', socketServer.clients.size);
+//     });
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port,()=> console.log(`listen on port ${port}..`));

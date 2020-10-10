@@ -101,26 +101,6 @@ exports.getPaginate = function(req,res){
         }
 
     });
-    // User.find({"username":req.body.decoded}, 'notes',function (err, user){
-    //
-    //     if (err) {
-    //         return res.status(500).send(err);
-    //     }
-    //
-    //     else  {
-    //
-    //         var myAggregate = User.aggregate([ { $unwind: "$notes" }, { $limit : 5 } ]);
-    //         User.aggregatePaginate(myAggregate, options).then(function(results){
-    //             console.log(results);
-    //             res.status(200).json(results);
-    //         }).catch(function(err){
-    //             console.log(err);
-    //         })
-    //
-    //     }
-    //
-    // });
-
 
 }
 exports.updateNote = function(req, res){
