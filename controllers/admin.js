@@ -4,7 +4,7 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var Admin = require('../models/admin');
 var Note = require('../models/note');
-
+var User = require('../models/user');
 exports.getUsers = function(req, res){
     const options ={
         offset : req.query.offset,
