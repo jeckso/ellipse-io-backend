@@ -9,6 +9,8 @@ router.use(bodyParser.json());
 var VerifyToken = require('../auth/VerifyToken');
 const users = require('../controllers/user');
 
+
+
 /**
  * Configure JWT
  */
@@ -17,6 +19,8 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
+// const UserEventEmitter = User.watch()
+// UserEventEmitter.on('change', change => console.log(JSON.stringify(change)))
 app.options('*', cors());
 router.post('/notes', VerifyToken, function (req, res) {
     if(req.body.title === ""){

@@ -5,6 +5,45 @@ var jwt = require('jsonwebtoken');
 var Admin = require('../models/admin');
 var Note = require('../models/note');
 
+exports.getUsers = function(req, res){
+    const options ={
+        offset : req.query.offset,
+        limit : req.query.count,
+        sort : req.query.orderBy,
+
+    }
+User.paginate({},options,function(err,result){
+    return res.status(302).json(result);
+})
+
+}
+exports.getPaginate = function(req,res){
+    const options ={
+        offset : req.query.offset,
+        limit : req.query.count,
+        sort : req.query.orderBy,
+
+    }
+    User.find({"username":req.parameters.id}, 'notes',function (err, user){
+
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+
+            var pageNumber = options.offset/options.limit+1;
+            var numItemsPerPage = options.limit;
+            const jsArray = user[0].notes.toObject();
+            // console.log(jsArray);
+            const result = Arrpaginate(jsArray,numItemsPerPage,pageNumber);
+            res.status(200).json(sortArray(result,{ by: 'createDate',
+                order: options.sort}));
+        }
+
+    });
+
+}
 exports.postAdmin = function(req, res) {
     Admin.find({"username":req.body.username}, function (err, user){
 

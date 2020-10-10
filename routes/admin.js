@@ -3,7 +3,7 @@ var router = express.Router();
 var app = express();
 var cors = require('cors');
 var bodyParser = require('body-parser');
-
+var AdminVerify = require('../auth/AdminVerify');
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
@@ -23,5 +23,11 @@ router.post('/login', function (req, res) {
 });
 router.post('/register', function (req, res) {
     admins.postAdmin(req,res);
+})
+router.get('/users', AdminVerify, function (req, res) {
+    admins.getUsers(req,res);
+})
+router.get('/users/:id', AdminVerify, function (req, res) {
+    admins.getUsers(req,res);
 })
 module.exports = router;
