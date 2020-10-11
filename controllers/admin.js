@@ -13,7 +13,7 @@ exports.getUsers = function(req, res){
 
     }
 User.paginate({},options,function(err,result){
-    return res.status(302).json(result);
+    return res.status(200).json(result);
 })
 
 }

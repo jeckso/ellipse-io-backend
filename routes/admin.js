@@ -28,6 +28,6 @@ router.get('/users', AdminVerify, function (req, res) {
     admins.getUsers(req,res);
 })
 router.get('/users/:id', AdminVerify, function (req, res) {
-    admins.getUsers(req,res);
+    admins.getPaginate(req,res);
 })
 module.exports = router;
