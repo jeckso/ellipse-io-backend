@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 var Admin = require('../models/admin');
 var Note = require('../models/note');
 var User = require('../models/user');
+const sortArray = require('sort-array');
 exports.getUsers = function(req, res){
     const options ={
         offset : req.query.offset,
@@ -17,21 +18,27 @@ User.paginate({},options,function(err,result){
 })
 
 }
+function Arrpaginate(array, page_size, page_number) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
 exports.getPaginate = function(req,res){
+
     const options ={
         offset : req.query.offset,
         limit : req.query.count,
         sort : req.query.orderBy,
 
     }
-    User.find({"username":req.parameters.id}, 'notes',function (err, user){
+    console.log(req.params.id);
+    User.find({"_id":req.params.id}, 'notes',function (err, user){
 
         if (err) {
             return res.status(500).send(err);
         }
 
         else  {
-
+            console.log(user);
             var pageNumber = options.offset/options.limit+1;
             var numItemsPerPage = options.limit;
             const jsArray = user[0].notes.toObject();
