@@ -115,6 +115,7 @@ exports.updateNote = function(req, res){
         }
 
         else  {
+
             var note  = user.notes.id(id);
             console.log(note);
 
@@ -134,7 +135,42 @@ exports.updateNote = function(req, res){
     });
 
 }
+function findWithAttr(array, attr, value) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
+}
 
+
+exports.deleteNote = function(req, res){
+    var id =  req.params.id;
+
+    User.findOne({"username":req.body.decoded, "notes._id" : id}, 'notes',function (err, user){
+        // console.log("gay")
+        // console.log(req.body);
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+            user.notes.pull(id); // works?
+
+
+
+            user.save(function(err) {
+                if (err)
+                    return res.send(err);
+
+                res.status(200).json("Deleted!");
+            });
+        }
+
+    });
+
+}
 exports.createNote = function(req, res){
     //User.findOneAndUpdate
 

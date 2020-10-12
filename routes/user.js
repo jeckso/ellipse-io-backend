@@ -22,6 +22,12 @@ var config = require('../config'); // get config file
 // const UserEventEmitter = User.watch()
 // UserEventEmitter.on('change', change => console.log(JSON.stringify(change)))
 app.options('*', cors());
+router.delete('/notes/:id', VerifyToken, function (req, res) {
+
+        users.createNote(req,res);
+
+
+});
 router.post('/notes', VerifyToken, function (req, res) {
     if(req.body.title === ""){
 
