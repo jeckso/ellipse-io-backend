@@ -18,10 +18,18 @@ User.paginate({},options,function(err,result){
 })
 
 }
+exports.deleteUsers = function(req, res){
+    User.findOneAndRemove({"_id":req.params.id},function(err,result){
+        return res.status(200).json(result);
+    })
+
+
+}
 function Arrpaginate(array, page_size, page_number) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
     return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
+
 exports.getPaginate = function(req,res){
 
     const options ={

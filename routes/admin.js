@@ -30,4 +30,7 @@ router.get('/users', AdminVerify, function (req, res) {
 router.get('/users/:id', AdminVerify, function (req, res) {
     admins.getPaginate(req,res);
 })
+router.delete('/users/:id', AdminVerify, function (req, res) {
+    admins.getPaginate(req,res);
+})
 module.exports = router;
