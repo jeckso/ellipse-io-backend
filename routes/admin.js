@@ -31,6 +31,6 @@ router.get('/users/:id', AdminVerify, function (req, res) {
     admins.getPaginate(req,res);
 })
 router.delete('/users/:id', AdminVerify, function (req, res) {
-    admins.getPaginate(req,res);
+    admins.deleteUsers(req,res);
 })
 module.exports = router;

@@ -26,20 +26,16 @@ app.options('*', cors());
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/admin', adminRouter);
-//var mysqlConnection = mysql.createConnection('mysql://b3020c234f7bf9:c2f9aeec@eu-cdbr-west-02.cleardb.net/heroku_a055cf7e4179e62?reconnect=true');
-  //  mysqlConnection.connect();
-// const socketServer = new WebSocket.Server({
-//     port: 3030});
-// socketServer.on('connection', (socketClient) => {
-//     console.log('connected');
-//     socketClient.send("PIDOR");
-//     console.log('client Set length: ', socketServer.clients.size);
-//     socketClient.on('close', (socketClient) => {
-//         console.log('closed');
-//         console.log('Number of clients: ', socketServer.clients.size);
-//     });
-// });
 
 const port = process.env.PORT || 3000;
-app.listen(port,()=> console.log(`listen on port ${port}..`));
+let server = app.listen(port,()=> console.log(`listen on port ${port}..`));
+//WEB SOCKET PART
+var io = require('socket.io')(server);
 
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+io.on('message', function (message) {
+    console.log("Got message: " + message);
+    io.sockets.emit('pageview', { 'url': message });
+});
