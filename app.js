@@ -1,5 +1,5 @@
 var express = require('express');
-const WebSocket = require('ws');
+const { Server } = require('ws');
 var cors = require('cors');
 const bodyparser = require('body-parser');
 var mongoose = require('mongoose');
@@ -25,7 +25,7 @@ app.use('/admin', adminRouter);
 const port = process.env.PORT || 3000;
 let server = app.listen(port,()=> console.log(`listen on port ${port}..`));
 //WEB SOCKET PART
-const wss = new WebSocket.Server({ port: 8080 })
+const wss = new Server({ server });
 var socketsArray = [];
 wss.on('connection', function connection(ws, request, client) {
 
