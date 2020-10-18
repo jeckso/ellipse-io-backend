@@ -1,12 +1,7 @@
-var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
+const WebSocket = require('ws');
 var cors = require('cors');
-const pool = require('generic-pool');;
-var logger = require('morgan');
 const bodyparser = require('body-parser');
-const WebSocket = require('ws'); // new
 var mongoose = require('mongoose');
 var authRouter = require('./auth/AuthController');
 var userRouter = require('./routes/user');
@@ -30,12 +25,38 @@ app.use('/admin', adminRouter);
 const port = process.env.PORT || 3000;
 let server = app.listen(port,()=> console.log(`listen on port ${port}..`));
 //WEB SOCKET PART
-var io = require('socket.io')(server);
+const wss = new WebSocket.Server({ port: 8080 })
+var socketsArray = [];
+wss.on('connection', function connection(ws, request, client) {
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
+    var id = request.headers['sec-websocket-key'];
+    socketsArray[id] = ws;
+    console.log('New Connection id :: ', id);
+    ws.send(id);
+    ws.on('message', function message(msg) {
+        var id = request.headers['sec-websocket-key'];
+        socketsArray[id].send("gay porn");
+
+        console.log('Message on :: ', id);
+        console.log('On message :: ', msg);
+        console.log(`Received message ${msg} from user ${client}`);
+    });
+
 });
-io.on('message', function (message) {
-    console.log("Got message: " + message);
-    io.sockets.emit('pageview', { 'url': message });
-});
+
+// server.on('upgrade', function upgrade(request, socket, head) {
+//     // This function is not defined on purpose. Implement it with your own logic.
+//     authenticate(request, (err, client) => {
+//         if (err || !client) {
+//             socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+//             socket.destroy();
+//             return;
+//         }
+//
+//         wss.handleUpgrade(request, socket, head, function done(ws) {
+//             wss.emit('connection', ws, request, client);
+//         });
+//     });
+// });
+
+
