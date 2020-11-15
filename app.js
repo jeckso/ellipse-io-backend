@@ -3,6 +3,7 @@ const { Server } = require('ws');
 var cors = require('cors');
 const bodyparser = require('body-parser');
 var mongoose = require('mongoose');
+var vitalsController = require('./controllers/vitals');
 var authRouter = require('./auth/AuthController');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
@@ -34,6 +35,14 @@ wss.on('connection', function connection(ws, request, client) {
     socketsArray[id] = ws;
    // console.log('New Connection id :: ', id);
   //  ws.send(id);
+  //   ws.on('message', toEvent)
+  //       .on('authenticate', function (data) {
+  //           jwt.verify(data.token, options, function (err, decoded) {
+  //               //now is authenticated
+  //           });
+  //       });
+  //
+  //   ws.send('something');
     function prob(){
         let  data = {
             pulse: Math.round(Math.random() * (120 - 60 + 1) + 60),
@@ -45,6 +54,7 @@ wss.on('connection', function connection(ws, request, client) {
     ws.on('message', function message(msg) {
         var id = request.headers['sec-websocket-key'];
         socketsArray[id].send("gay porn");
+        vitalsController.addVitalsTest(msg);
 
         // console.log('Message on :: ', id);
         // console.log('On message :: ', msg);
