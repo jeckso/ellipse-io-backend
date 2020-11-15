@@ -24,7 +24,7 @@ var config = require('../config'); // get config file
 app.options('*', cors());
 router.delete('/notes/:id', VerifyToken, function (req, res) {
 
-        users.createNote(req,res);
+        users.deleteNote(req,res);
 
 
 });
