@@ -212,7 +212,9 @@ exports.postUsers = function(req, res) {
         else if(user[0] == null) {
             var user = new User({
                 username: req.body.username,
-                password: bcrypt.hashSync(req.body.password, 8)
+                password: bcrypt.hashSync(req.body.password, 8),
+                fio: req.body.fio,
+                inn: req.body.inn
             });
             user.save(function(err) {
                 if (err)
@@ -231,7 +233,35 @@ exports.postUsers = function(req, res) {
 
 
 };
+exports.updateUsers = function(req, res) {
+    User.find({"username":req.body.username}, function (err, user){
+        if (err) {
+            return res.status(500).send(err);
+        }
+        else  {
+            if (req.body.password && req.body.password !== "") {
+                user.password = req.body.password
+            }
+            if (req.body.inn && req.body.inn !== "") {
+                user.inn = req.inn
+            }
+            if (req.body.fio && req.body.fio !== "") {
+                user.inn = req.body.fio
+            }
+            user.save(function(err) {
+                if (err)
+                    return res.send(err);
 
+                res.status(200).json({ message: 'User has been successfully updated! ' });
+            });
+        }
+
+
+    });
+
+
+
+};
 // Create endpoint /auth/users for GET
 exports.getUsers = function(req, res) {
 

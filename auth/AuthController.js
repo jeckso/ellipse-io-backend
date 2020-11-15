@@ -72,7 +72,15 @@ router.post('/register', function (req, res) {
     req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
     users.postUsers(req,res);
-   // res.status(200).send({  registered: true } );
+    // res.status(200).send({  registered: true } );
+
+});
+router.patch('/register', function (req, res) {
+    req.header("Access-Control-Allow-Origin", "*");
+    req.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Authorization, Content-Type, Accept");
+    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    users.updateUsers(req,res);
+    // res.status(200).send({  registered: true } );
 
 });
 

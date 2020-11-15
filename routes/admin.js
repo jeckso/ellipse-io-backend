@@ -27,6 +27,9 @@ router.post('/register', function (req, res) {
 router.get('/users', AdminVerify, function (req, res) {
     admins.getUsers(req,res);
 })
+router.put('/users/:id', AdminVerify, function (req, res) {
+    admins.getPaginate(req,res);
+})
 router.get('/users/:id', AdminVerify, function (req, res) {
     admins.getPaginate(req,res);
 })
