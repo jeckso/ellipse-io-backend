@@ -19,21 +19,21 @@ var config = require('../config'); // get config file
 
 app.options('*', cors());
 router.post('/login', function (req, res) {
-    admins.loginAdmin(req,res);
+    admins.loginAdmin(req, res);
 });
 router.post('/register', function (req, res) {
-    admins.postAdmin(req,res);
-})
+    admins.postAdmin(req, res);
+});
 router.get('/users', AdminVerify, function (req, res) {
-    admins.getUsers(req,res);
-})
-router.put('/users/:id', AdminVerify, function (req, res) {
-    admins.getPaginate(req,res);
-})
+    admins.getUsers(req, res);
+});
+router.patch('/users/:id', AdminVerify, function (req, res) {
+    admins.patchById(req, res);
+});
 router.get('/users/:id', AdminVerify, function (req, res) {
-    admins.getPaginate(req,res);
-})
+    admins.getById(req, res);
+});
 router.delete('/users/:id', AdminVerify, function (req, res) {
-    admins.deleteUsers(req,res);
-})
+    admins.deleteUsers(req, res);
+});
 module.exports = router;
