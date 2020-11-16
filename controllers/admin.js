@@ -12,53 +12,71 @@ exports.getUsers = function(req, res){
         limit : req.query.count,
         sort : req.query.orderBy,
 
-    }
+    };
 User.paginate({},options,function(err,result){
     return res.status(200).json(result);
 })
 
-}
+};
 exports.deleteUsers = function(req, res){
     User.findOneAndRemove({"_id":req.params.id},function(err,result){
         return res.status(200).json(result);
     })
 
 
-}
+};
 function Arrpaginate(array, page_size, page_number) {
     // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
     return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
 
-exports.getPaginate = function(req,res){
 
-    const options ={
-        offset : req.query.offset,
-        limit : req.query.count,
-        sort : req.query.orderBy,
-
-    }
-    console.log(req.params.id);
+exports.getById = function (req,res){
     User.find({"_id":req.params.id}, 'notes',function (err, user){
-
         if (err) {
             return res.status(500).send(err);
+        } else  {
+            return res.status(200).json(user);
         }
-
-        else  {
-            console.log(user);
-            var pageNumber = options.offset/options.limit+1;
-            var numItemsPerPage = options.limit;
-            const jsArray = user[0].notes.toObject();
-            // console.log(jsArray);
-            const result = Arrpaginate(jsArray,numItemsPerPage,pageNumber);
-            res.status(200).json(sortArray(result,{ by: 'createDate',
-                order: options.sort}));
-        }
-
     });
+};
 
-}
+exports.patchById = function (req,res){
+    User.find({"_id":req.params.id}, 'notes',function (err, user){
+        if (err) {
+            if (req.body.password && req.body.password !== "") {
+                user.password = req.body.password
+            }
+            if (req.body.fio && req.body.fio !== "") {
+                user.fio = req.body.password
+            }
+            if (req.body.inn && req.body.inn !== "") {
+                user.inn = req.body.inn
+            }
+            user.save(function (err) {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.status(200).json(user);
+                }
+            });
+            return res.status(500).send(err);
+        } else  {
+            return res.status(200).json(user);
+        }
+    });
+};
+
+exports.getPaginate = function(req,res){
+    User.find({"_id":req.params.id}, 'notes',function (err, user){
+        if (err) {
+            return res.status(500).send(err);
+        } else  {
+            return res.status(200).json(user);
+        }
+    });
+};
+
 exports.postAdmin = function(req, res) {
     Admin.find({"username":req.body.username}, function (err, user){
 
