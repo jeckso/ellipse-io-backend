@@ -32,7 +32,7 @@ function Arrpaginate(array, page_size, page_number) {
 
 
 exports.getById = function (req,res){
-    User.find({"_id":req.params.id},function (err, user){
+    User.findOne({"_id":req.params.id},function (err, user){
         console.log(user);
         if (err) {
             res.status(500).send(err);
@@ -43,17 +43,18 @@ exports.getById = function (req,res){
 };
 
 exports.patchById = function (req,res){
-    User.find({"_id":req.params.id}, function (err, user){
-        if (err) {
+    User.findOne({"_id":req.params.id}, function (err, user){
+        if (!err) {
             if (req.body.password && req.body.password !== "") {
-                user.password = req.body.password
+                user.password = bcrypt.hashSync(req.body.password, 8);
             }
             if (req.body.fio && req.body.fio !== "") {
-                user.fio = req.body.password
+                user.fio = req.body.fio;
             }
             if (req.body.inn && req.body.inn !== "") {
-                user.inn = req.body.inn
+                user.inn = req.body.inn;
             }
+            console.log(user);
             user.save(function (err) {
                 if (err) {
                     res.status(500).send(err);
@@ -61,9 +62,9 @@ exports.patchById = function (req,res){
                     res.status(200).json(user);
                 }
             });
-            res.status(500).send(err);
+
         } else  {
-            res.status(200).json(user);
+            res.status(500).json(user);
         }
     });
 };
