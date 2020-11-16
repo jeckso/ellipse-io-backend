@@ -32,17 +32,18 @@ function Arrpaginate(array, page_size, page_number) {
 
 
 exports.getById = function (req,res){
-    User.find({"_id":req.params.id}, 'notes',function (err, user){
+    User.find({"_id":req.params.id},function (err, user){
+        console.log(user);
         if (err) {
-            return res.status(500).send(err);
+            res.status(500).send(err);
         } else  {
-            return res.status(200).json(user);
+            res.status(200).json(user);
         }
     });
 };
 
 exports.patchById = function (req,res){
-    User.find({"_id":req.params.id}, 'notes',function (err, user){
+    User.find({"_id":req.params.id}, function (err, user){
         if (err) {
             if (req.body.password && req.body.password !== "") {
                 user.password = req.body.password
@@ -60,9 +61,9 @@ exports.patchById = function (req,res){
                     res.status(200).json(user);
                 }
             });
-            return res.status(500).send(err);
+            res.status(500).send(err);
         } else  {
-            return res.status(200).json(user);
+            res.status(200).json(user);
         }
     });
 };
