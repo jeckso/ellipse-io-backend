@@ -37,7 +37,7 @@ exports.addVitals =  async function (req, res){
 }
 
 exports.addVitalsTest =  async function (req, res){
-    User.find({"username": "3801987654321"}, async function (err, user) {
+    User.findOne({"username": "380997099357"}, async function (err, user) {
 
         if (err) {
             return res.status(500).send(err);
@@ -46,9 +46,11 @@ exports.addVitalsTest =  async function (req, res){
 
         // book.publisher = publisher._id; <=== Assign user id from signed in publisher to publisher key
         await vitals.save();
+        console.log(user);
+        console.log(typeof user.vitals);
         user.vitals.push(vitals);
         await user.save();
-        res.status(200).json({success:true, data: user });
+        //res.status(200).json({success:true, data: user });
     });
 }
 exports.getUserVitals = async function (req,res){

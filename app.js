@@ -43,14 +43,14 @@ wss.on('connection', function connection(ws, request, client) {
   //       });
   //
   //   ws.send('something');
-    function prob(){
-        let  data = {
-            pulse: Math.round(Math.random() * (120 - 60 + 1) + 60),
-            time: new Date().toLocaleTimeString().slice(0,-6)
-
-        };
-        ws.send(JSON.stringify(data));
-    }
+  //   function prob(){
+  //       let  data = {
+  //           pulse: Math.round(Math.random() * (120 - 60 + 1) + 60),
+  //           time: new Date().toLocaleTimeString().slice(0,-6)
+  //
+  //       };
+  //       ws.send(JSON.stringify(data));
+  //   }
     ws.on('message', function message(msg) {
         var id = request.headers['sec-websocket-key'];
         socketsArray[id].send("gay porn");
@@ -61,7 +61,7 @@ wss.on('connection', function connection(ws, request, client) {
         // console.log(`Received message ${msg} from user ${client}`);
     });
 
-    setInterval(prob,1500);
+    // setInterval(prob,1500);
 });
 
 // server.on('upgrade', function upgrade(request, socket, head) {

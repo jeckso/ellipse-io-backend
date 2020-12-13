@@ -5,7 +5,7 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 var VerifyToken = require('./VerifyToken');
-var mysql = require('../database');
+
 router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
