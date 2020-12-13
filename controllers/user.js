@@ -213,7 +213,8 @@ exports.postUsers = function(req, res) {
             var user = new User({
                 username: req.body.username,
                 password: bcrypt.hashSync(req.body.password, 8),
-                fio: req.body.fio,
+                dob: req.body.dob,
+                sex: req.body.sex,
                 inn: req.body.inn
             });
             user.save(function(err) {
@@ -243,10 +244,13 @@ exports.updateUsers = function(req, res) {
                 user.password = req.body.password
             }
             if (req.body.inn && req.body.inn !== "") {
-                user.inn = req.inn
+                user.inn = req.body.inn
             }
-            if (req.body.fio && req.body.fio !== "") {
-                user.inn = req.body.fio
+            if (req.body.dob && req.body.dob !== "") {
+                user.dob = req.body.dob
+            }
+            if (req.body.sex && req.body.sex !== "") {
+                user.sex = req.body.sex
             }
             user.save(function(err) {
                 if (err)

@@ -6,7 +6,8 @@ var Note = require('./note').schema;
 // module.exports allows us to pass this to other files when it is called
 const userSchema = new mongoose.Schema({
     username : {type : String, default: ''},
-    fio : {type : String, default: ''},
+    sex :{type : String, default: ''},
+    dob : {type : Date},
     inn : {type : String, default: ''},
     password : {type : String, default: ''},
     notes : [Note],
