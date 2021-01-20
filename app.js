@@ -31,6 +31,7 @@ var socketsArray = [];
 
 wss.on('connection', function connection(ws, request, client) {
 
+    console.log(request.headers);
     var id = request.headers['sec-websocket-key'];
     socketsArray[id] = ws;
    // console.log('New Connection id :: ', id);
