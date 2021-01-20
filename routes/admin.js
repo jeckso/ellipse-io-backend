@@ -17,6 +17,9 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
+router.get('/export/:id', AdminVerify, function (req, res) {
+    admins.exportDB(req, res);
+});
 app.options('*', cors());
 router.post('/login', function (req, res) {
     admins.loginAdmin(req, res);

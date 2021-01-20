@@ -2,9 +2,13 @@
 var config = require('../config'); // get config file
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+var mongooseToCsv = require('mongoose-to-csv')
 var Admin = require('../models/admin');
+const fs = require('fs');
 var Note = require('../models/note');
+const mongotocsv = require('mongo-to-csv');
 var User = require('../models/user');
+var Vitals = require('../models/vitals');
 const sortArray = require('sort-array');
 exports.getUsers = function(req, res){
     const options ={
@@ -41,7 +45,37 @@ exports.getById = function (req,res){
         }
     });
 };
+function GenerateCsv(user){
+    var hrColum ="hr,isCritical,Date\n";
+    user.vitals.forEach(function(value){
+        hrColum+=value.hr+","+value.isCritical+","+value.time+'\n';
+    });
+    return hrColum;
+}
+exports.exportDB = function (req,res){
+    // User.findAndStreamCsv({"_id":"5fb222f06b049100174ed411"})
+    //     .pipe(fs.createWriteStream('users_under_40.csv'));
+    User.
+    findOne({"_id":req.params.id}).
+    populate({
+        path : "vitals",
+        options: { limit: 200 }
+    }).
 
+    exec(function (err, user) {
+
+        res.attachment('user.csv');
+        res.status(200);
+        let writable = fs.createWriteStream('user.csv');
+       // writable.write(GenerateCsv(user))
+      return res.send(Buffer.from(GenerateCsv(user)));
+        // if (err)  return res.status(500).send(err);
+        // res.status(200).json({success:true, data: user.vitals });
+        //console.log('The author is %s', story.author.name);
+
+    });
+
+};
 exports.patchById = function (req,res){
     User.findOne({"_id":req.params.id}, function (err, user){
         if (!err) {
