@@ -8,6 +8,7 @@ router.use(bodyParser.urlencoded({extended: false}));
 router.use(bodyParser.json());
 
 const admins = require('../controllers/admin');
+const vitalsController = require('../controllers/vitals');
 
 /**
  * Configure JWT
@@ -17,8 +18,12 @@ var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
-router.get('/export/:id', AdminVerify, function (req, res) {
-    admins.exportDB(req, res);
+router.get('/export/:id', function (req, res) {
+   // admins.exportDB(req, res);
+
+
+   // vitalsController.addVitalsTest(req,res);
+     admins.exportDBParams(req, res);
 });
 app.options('*', cors());
 router.post('/login', function (req, res) {
