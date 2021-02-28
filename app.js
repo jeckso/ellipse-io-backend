@@ -38,8 +38,8 @@ function authenticate(request, callback) {
 }
 
 //const wss = new Server({ server });
-const admin = new WebSocket.Server({server: server, path: '/admin'});
-const android = new WebSocket.Server({server: server, path: '/android'});
+const admin = new WebSocket.Server({noServer:true, path: '/admin'});
+const android = new WebSocket.Server({noServer:true, path: '/android'});
 
 admin.on('connection', (ws, req) => {
     admin.isAlive = true;
