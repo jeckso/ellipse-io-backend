@@ -60,14 +60,14 @@ android.on('connection', (ws, req) => {
     });
 });
 
-const client = new WebSocket("ws://localhost:8081/android");
-client.onopen = (ev) => {
-    let a = 0;
-    setInterval(() => {
-        ev.target.send("HUY" + a);
-        a++;
-    }, 500)
-};
+// const client = new WebSocket("ws://localhost:8081/android");
+// client.onopen = (ev) => {
+//     let a = 0;
+//     setInterval(() => {
+//         ev.target.send("HUY" + a);
+//         a++;
+//     }, 500)
+// };
 
 // server.on('upgrade', function upgrade(request, socket, head) {
 //     // This function is not defined on purpose. Implement it with your own logic.
