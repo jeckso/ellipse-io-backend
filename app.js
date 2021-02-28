@@ -1,4 +1,3 @@
-
 var url = require('url')
 var express = require('express');
 var app = express();
@@ -32,53 +31,43 @@ app.use('/admin', adminRouter);
 
 const port = process.env.PORT || 3000;
 let server = app.listen(port, () => console.log(`listen on port ${port}..`));
+
 //WEB SOCKET PART
-function authenticate(request,callback) {
+function authenticate(request, callback) {
     users.loginUsers(request);
 }
+
 //const wss = new Server({ server });
-const wss1 = new WebSocket.Server({server: server, path: "/mobile"});
-const wss2 = new WebSocket.Server({server: server, path: "/web"});
+const admin = new WebSocket.Server({port: 8080, server: server, path: '/admin'});
+const android = new WebSocket.Server({port: 8081, server: server, path: '/android'});
 
-console.log("server");
-console.log(server);
-
-console.log("wss1: ");
-console.log(wss1);
-
-console.log("wss2: ");
-console.log(wss2);
-
-console.log("wss1: " + wss1);
-console.log("wss2: " + wss2);
-
-wss1.on('connection', function connection(ws) {
-    ws.send("WEBSOCKET1 TEST");
+admin.on('connection', (ws, req) => {
+    admin.isAlive = true;
+    ws.on('message', message => {
+        ws.send(message)
+    });
 });
 
-wss2.on('connection', function connection(ws) {
-    ws.send("WEBSOCKET2 TEST");
+android.on('connection', (ws, req) => {
+    ws.on('message', message => {
+        if (admin.isAlive === true) {
+            admin.clients.forEach(cl => {
+                if (cl !== ws && cl.readyState === WebSocket.OPEN) {
+                    cl.send(message)
+                }
+            });
+        }
+    });
 });
 
-wss2.on('message', function connection(ws) {
-    ws.send("WEBSOCKET2 TEST");
-    console.log(ws);
-});
-
-wss1.on('message', function connection(ws) {
-    ws.send("WEBSOCKET1 TEST");
-    console.log(ws);
-});
-
-wss2.on('error', function connection(error) {
-    ws.send("WEBSOCKET2 TEST " + error);
-    console.log("WS_2 " + error);
-});
-
-wss1.on('error', function connection(error) {
-    ws.send("WEBSOCKET1 TEST " + error);
-    console.log("WS_1 " + error);
-});
+const client = new WebSocket("ws://localhost:8081/android");
+client.onopen = (ev) => {
+    let a = 0;
+    setInterval(() => {
+        ev.target.send("HUY" + a);
+        a++;
+    }, 500)
+};
 
 // server.on('upgrade', function upgrade(request, socket, head) {
 //     // This function is not defined on purpose. Implement it with your own logic.
