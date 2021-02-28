@@ -7,9 +7,11 @@ var Admin = require('../models/admin');
 const fs = require('fs');
 var Note = require('../models/note');
 const mongotocsv = require('mongo-to-csv');
+const path = require('path');
 var User = require('../models/user');
 var Vitals = require('../models/vitals');
 const sortArray = require('sort-array');
+var mongoXlsx = require('mongo-xlsx');
 exports.getUsers = function(req, res){
     const options ={
         offset : req.query.offset,
@@ -52,6 +54,47 @@ function GenerateCsv(user){
     });
     return hrColum;
 }
+function Arrpaginate(array, page_size, page_number) {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+}
+
+exports.exportDBParams = function(req, res){
+    const options ={
+        offset : req.query.offset,
+        limit : req.query.count,
+        sort : req.query.orderBy,
+    }
+    User.findOne({"_id":req.params.id}).populate({
+        path : "vitals",
+        options: options
+    }).exec(function (err, user){
+
+        if (err) {
+            return res.status(500).send(err);
+        }
+
+        else  {
+            var staticModel = [ { displayName: 'Hearth Rate', access: 'hr', type: 'number' },{ displayName: 'isCritical', access: 'isCritical', type: 'boolean' },{ displayName: 'time', access: 'time', type: 'time' } ]
+            mongoXlsx.mongoData2Xlsx(user.vitals, staticModel, function(err, data) {
+                console.log('File saved at:', data.fullPath);
+                // res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                // res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+                // res.attachment(data.fileName);
+
+               // const file = `${__dirname}`;
+               // console.log(data);
+               var file = __dirname.slice(0,__dirname.lastIndexOf('/'))+"/"+data.fullPath;
+                console.log(file);
+              //  console.log( path.join(__dirname, '/pictures'));
+                // writable.write(GenerateCsv(user))
+                return res.download(file);
+            });
+
+        }
+
+    });
+}
 exports.exportDB = function (req,res){
     // User.findAndStreamCsv({"_id":"5fb222f06b049100174ed411"})
     //     .pipe(fs.createWriteStream('users_under_40.csv'));
@@ -81,9 +124,6 @@ exports.patchById = function (req,res){
         if (!err) {
             if (req.body.password && req.body.password !== "") {
                 user.password = bcrypt.hashSync(req.body.password, 8);
-            }
-            if (req.body.fio && req.body.fio !== "") {
-                user.fio = req.body.fio;
             }
             if (req.body.inn && req.body.inn !== "") {
                 user.inn = req.body.inn;

@@ -42,6 +42,7 @@ exports.addVitalsTest =  async function (req, res){
         if (err) {
             return res.status(500).send(err);
         }
+
         const vitals = new Vitals(req.body);
 
         // book.publisher = publisher._id; <=== Assign user id from signed in publisher to publisher key
@@ -50,9 +51,23 @@ exports.addVitalsTest =  async function (req, res){
         console.log(typeof user.vitals);
         user.vitals.push(vitals);
         await user.save();
-        //res.status(200).json({success:true, data: user });
+      //  res.status(200).json({success:true, data: user });
     });
 }
+
+exports.getLatestUserVital = async function(req,res){
+    User.
+    findOne({"username":req.selectedUser}).
+    sort({created_at: -1}).
+    exec(function (err, user) {
+        if (err)  return res.status(500).send(err);
+        res.status(200).json({success:true, data: user.vitals });
+        //console.log('The author is %s', story.author.name);
+
+    });
+
+}
+
 exports.getUserVitals = async function (req,res){
     User.
     findOne({"username":req.body.username}).

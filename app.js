@@ -1,5 +1,9 @@
+var url = require('url')
 var express = require('express');
-const { Server } = require('ws');
+var app = express();
+var expressWs = require('express-ws')(app);
+const {Server} = require('ws');
+const WebSocket = require('ws');
 var cors = require('cors');
 const bodyparser = require('body-parser');
 var mongoose = require('mongoose');
@@ -7,13 +11,15 @@ var vitalsController = require('./controllers/vitals');
 var authRouter = require('./auth/AuthController');
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
+var socket = require('./socket/websocket')
 var db = require('./config/db');
-console.log("connecting--",db);
+
+console.log("connecting--", db);
 mongoose.connect(db.url); //Mongoose connection created
-var app = express();
+
 app.use(cors())
 //var mysql = require("mysql");
-app.use(bodyparser.urlencoded({ extended: false }))
+app.use(bodyparser.urlencoded({extended: false}))
 
 app.use(bodyparser.json())
 app.options('*', cors());
@@ -24,46 +30,44 @@ app.use('/user', userRouter);
 app.use('/admin', adminRouter);
 
 const port = process.env.PORT || 3000;
-let server = app.listen(port,()=> console.log(`listen on port ${port}..`));
+let server = app.listen(port, () => console.log(`listen on port ${port}..`));
+
 //WEB SOCKET PART
-const wss = new Server({ server });
-var socketsArray = [];
+function authenticate(request, callback) {
+    users.loginUsers(request);
+}
 
-wss.on('connection', function connection(ws, request, client) {
+//const wss = new Server({ server });
+const admin = new WebSocket.Server({port: 8080, server: server, path: '/admin'});
+const android = new WebSocket.Server({port: 8081, server: server, path: '/android'});
 
-    console.log(request.headers);
-    var id = request.headers['sec-websocket-key'];
-    socketsArray[id] = ws;
-   // console.log('New Connection id :: ', id);
-  //  ws.send(id);
-  //   ws.on('message', toEvent)
-  //       .on('authenticate', function (data) {
-  //           jwt.verify(data.token, options, function (err, decoded) {
-  //               //now is authenticated
-  //           });
-  //       });
-  //
-  //   ws.send('something');
-  //   function prob(){
-  //       let  data = {
-  //           pulse: Math.round(Math.random() * (120 - 60 + 1) + 60),
-  //           time: new Date().toLocaleTimeString().slice(0,-6)
-  //
-  //       };
-  //       ws.send(JSON.stringify(data));
-  //   }
-    ws.on('message', function message(msg) {
-        var id = request.headers['sec-websocket-key'];
-        socketsArray[id].send("gay porn");
-        vitalsController.addVitalsTest(msg);
-
-        // console.log('Message on :: ', id);
-        // console.log('On message :: ', msg);
-        // console.log(`Received message ${msg} from user ${client}`);
+admin.on('connection', (ws, req) => {
+    admin.isAlive = true;
+    ws.on('message', message => {
+        ws.send(message)
     });
-
-    // setInterval(prob,1500);
 });
+
+android.on('connection', (ws, req) => {
+    ws.on('message', message => {
+        if (admin.isAlive === true) {
+            admin.clients.forEach(cl => {
+                if (cl !== ws && cl.readyState === WebSocket.OPEN) {
+                    cl.send(message)
+                }
+            });
+        }
+    });
+});
+
+// const client = new WebSocket("ws://localhost:8081/android");
+// client.onopen = (ev) => {
+//     let a = 0;
+//     setInterval(() => {
+//         ev.target.send("HUY" + a);
+//         a++;
+//     }, 500)
+// };
 
 // server.on('upgrade', function upgrade(request, socket, head) {
 //     // This function is not defined on purpose. Implement it with your own logic.
