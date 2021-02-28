@@ -125,9 +125,6 @@ exports.patchById = function (req,res){
             if (req.body.password && req.body.password !== "") {
                 user.password = bcrypt.hashSync(req.body.password, 8);
             }
-            if (req.body.fio && req.body.fio !== "") {
-                user.fio = req.body.fio;
-            }
             if (req.body.inn && req.body.inn !== "") {
                 user.inn = req.body.inn;
             }

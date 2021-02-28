@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "^4.16.4",
+    "express-ws": "^4.0.0",
     "fs": "0.0.1-security",
     "generic-pool": "^3.7.1",
     "http-errors": "~1.6.3",
@@ -30,7 +31,7 @@
     "pug": "2.0.0-beta11",
     "socket.io": "^2.3.0",
     "sort-array": "^4.1.2",
-    "ws": "^7.3.1"
+    "ws": "^7.4.3"
   },
   "description": "chat",
   "main": "app.js",

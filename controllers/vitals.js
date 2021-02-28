@@ -54,6 +54,20 @@ exports.addVitalsTest =  async function (req, res){
       //  res.status(200).json({success:true, data: user });
     });
 }
+
+exports.getLatestUserVital = async function(req,res){
+    User.
+    findOne({"username":req.selectedUser}).
+    sort({created_at: -1}).
+    exec(function (err, user) {
+        if (err)  return res.status(500).send(err);
+        res.status(200).json({success:true, data: user.vitals });
+        //console.log('The author is %s', story.author.name);
+
+    });
+
+}
+
 exports.getUserVitals = async function (req,res){
     User.
     findOne({"username":req.body.username}).
