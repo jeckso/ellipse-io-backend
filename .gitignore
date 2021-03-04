@@ -220,5 +220,8 @@ fabric.properties
 # CodeStream plugin
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
-
+.idea/modules.xml
+.idea/inspectionProfiles/
+.idea/vcs.xml
+.idea/ellipse-io-backend.iml
 # End of https://www.toptal.com/developers/gitignore/api/node,jspm,webstorm
