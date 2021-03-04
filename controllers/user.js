@@ -24,7 +24,6 @@ exports.loginUsers = function(req, res) {
             return res.status(500).send(err);
         }
         else if(user[0] == null) {
-            console.log("nenahod");
             return res.status(401).send({auth: false, token: null});
             // return false;
         }
@@ -38,11 +37,11 @@ exports.loginUsers = function(req, res) {
                 if (!passwordIsValid) { return res.status(401).send("Wrong password");   }
 
                 // Success
-                var token = jwt.sign({username: req.body.username}, config.secret, {
+                var token = jwt.sign({
+                    username: req.body.username
+                }, config.secret, {
                     expiresIn: 86400 // expires in 24 hours
-
                 });
-                console.log("PIDOR")
                 return res.status(200).send({auth: true, token: token});
                 //return res.status(200).json({"token":'Basic '+Buffer.from(req.body.username+":"+req.body.password).toString('base64'),"_id":user[0]._id});
                // return true;
@@ -56,7 +55,6 @@ exports.createNote = function(req, res){
     //User.findOneAndUpdate
 
     User.findOne({"username":req.body.decoded}, 'notes',function (err, user){
-console.log(user);
         if (err) {
             return res.status(500).send(err);
         }

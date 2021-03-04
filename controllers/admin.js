@@ -41,7 +41,6 @@ exports.loginAdmin = function(req, res) {
             return res.status(500).send(err);
         }
         else if(admin[0] == null) {
-            console.log("nenahod");
             return res.status(401).send({auth: false, token: null});
             // return false;
         }
@@ -59,7 +58,6 @@ exports.loginAdmin = function(req, res) {
                 expiresIn: 86400 // expires in 24 hours
 
             });
-            console.log("PIDOR")
             return res.status(200).send({auth: true, token: token});
             //return res.status(200).json({"token":'Basic '+Buffer.from(req.body.username+":"+req.body.password).toString('base64'),"_id":user[0]._id});
             // return true;

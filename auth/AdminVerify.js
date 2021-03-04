@@ -23,7 +23,6 @@ function AdminVerify(req, res, next) {
             if (err) {
                 return res.status(500).send(err);
             } else if (admin[0] == null) {
-                console.log("nenahod");
                 return res.status(401).send({auth: false, token: null});
                 // return false;
             }
