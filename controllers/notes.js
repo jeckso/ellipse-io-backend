@@ -2,9 +2,9 @@ const Note = require('../models/note');
 
 exports.createNote = (customUserId, body, callback) => {
     body.userCustomId = customUserId;
+    body.createDate = Date();
+    body.updateDate = Date();
     let note = new Note(body);
-    note.createDate = Date();
-    note.updateDate = Date();
     note.save(callback);
 };
 
@@ -21,8 +21,6 @@ exports.getAllNotes = (customUserId, title, content, offset, limit, callback) =>
     if (content) {
         conditions.content = {"$regex": content, "$options": "i"}
     }
-    console.log(JSON.stringify(conditions));
-    console.log("LIMIT " + limit + " 0FFSET " + offset);
     Note.find(conditions, {}, {skip: offset, limit: limit}, callback);
 };
 

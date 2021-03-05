@@ -11,12 +11,14 @@ mongoose.connect(db.url); //Mongoose connection created
 const app = express();
 const notes = require('./routes/notes');
 const admin = require('./routes/admin');
+const healthParams = require('./routes/healt_params');
 const bodyParser = require('body-parser');
 
 
 app.options('*', cors());
 
 app.use('/api/user/notes', bodyParser.json(), auth.verifyUserToken, notes);
+app.use('/api/user/health_params', auth.verifyUserToken, healthParams);
 app.use('/api/admin', bodyParser.json(), auth.verifyAdminToken, admin);
 
 app.use('/api/admin/login', bodyParser.json(), auth.loginAdmin);
