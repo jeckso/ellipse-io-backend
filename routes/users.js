@@ -15,7 +15,7 @@ router.post("/", (req, res) => {
 router.patch("/:id", (req, res) => {
     const {id} = req.params;
     if (!id) {
-        res.status(400).send({"message": "Patch could not work without id"});
+        return res.status(400).send({"message": "Patch could not work without id"});
     }
     users.updateUser(id, req.body, (err, user) => {
         if (err) res.status(500).send(err);
@@ -26,7 +26,7 @@ router.patch("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
     const {id} = req.params;
     if (!id) {
-        res.status(400).send({"message": "Delete could not work without id"});
+        returnres.status(400).send({"message": "Delete could not work without id"});
     }
     users.deleteUserById(id, (err, user) => {
         if (err) res.status(500).send(err);
@@ -36,7 +36,7 @@ router.delete("/:id", (req, res) => {
 
 router.get("/", (req, res) => {
     let query = req.query;
-    let page = parseInt(query.page) || 0;
+    let page = parseInt(query.page) || 1;
     let perPage = parseInt(query.perPage) || 20;
     users.findAllUsers(
         query.phone,
@@ -52,7 +52,7 @@ router.get("/", (req, res) => {
 router.get("/:id", (req, res) => {
     const {id} = req.params;
     if (!id) {
-        res.status(400).send({"message": "Delete could not work without id"});
+        return res.status(400).send({"message": "Delete could not work without id"});
     }
     users.findUserById(id, (err, user) => {
         if (err) res.status(500).send(err);

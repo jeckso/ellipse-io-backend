@@ -1,11 +1,24 @@
-var mongoose = require('mongoose');
-
-// define our students model
-// module.exports allows us to pass this to other files when it is called
-module.exports = mongoose.model('Note', {
-    id : {type : Number },
-    title : {type : String},
-    content : {type : String},
-    createDate : {type : Date},
-    updateDate : {type : Date}
+const mongoose = require('mongoose');
+const schema = mongoose.Schema({
+    userCustomId: {
+        type: String,
+        index: true,
+        required: [true, 'A note must have a reference to user'],
+    },
+    title: {
+        type: String,
+        required: [true, 'Title is required']
+    },
+    content: {
+        type: String
+    },
+    createDate: {
+        type: Date,
+        required: [true, 'Creation date is Required']
+    },
+    updateDate: {
+        type: Date,
+        required: [true, 'Updating date is Required']
+    }
 });
+module.exports = mongoose.model('Note', schema);

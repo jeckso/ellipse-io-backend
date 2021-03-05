@@ -1,8 +1,9 @@
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 exports.createUser = (body, callback) => {
-    body.password = bcrypt.hashSync(body, 8);
+    body.password = bcrypt.hashSync(body.password, 8);
     let user = new User(body);
     user.save(callback);
 };
@@ -32,5 +33,21 @@ exports.updateUser = (id, body, callback) => {
 
 exports.deleteUserById = (id, callback) => {
     User.findByIdAndDelete(id, {}, callback);
+};
+
+exports.login = (phone, password, callback) => {
+    exports.findUserByPhone(phone, (error, user) => {
+        console.log("PHONE " + phone)
+        if (error) {
+            return callback(error, null)
+        }
+        if (bcrypt.compareSync(password, user.password)) {
+            console.log("MATCHED " + password + " " + user.password)
+            callback(null, user)
+        } else {
+            console.log("NOT MATCHED " + password + " " + user.password)
+            callback(new mongoose.Error.ValidatorError({message: "Irregular username or password"}), null)
+        }
+    });
 };
 
