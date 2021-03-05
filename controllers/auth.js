@@ -6,12 +6,12 @@ const jwt = require('jsonwebtoken');
 exports.loginAdmin = (req, res) => {
     let {username, password} = req.body;
     if (!username) {
-        return res.status(400).send({"message": "Phone can not be empty"});
+        return res.status(400).send({"message": "Username can not be empty"});
     }
-    if (!username) {
+    if (!password) {
         return res.status(400).send({"message": "Password can not be empty"});
     }
-    admin.login(req.body, password, (err, admin) => {
+    admin.login(username, password, (err, admin) => {
         if (err) {
             return res.status(401).send(err)
         }
@@ -67,9 +67,6 @@ exports.verifyAdminToken = (req, res, next) => {
     if (!token) {
         return res.status(403).send({"message": 'No token provided.'});
     }
-    if (!decoded.isAdmin) {
-        return res.status(403).send({auth: false, message: 'Forbidden role.'});
-    }
     exports.checkAdminToken(token, (err, admin) => {
         if (err) {
             return res.status(401).send({"message": 'Failed to authenticate user.'});
@@ -116,6 +113,9 @@ exports.checkUserToken = (token, callback) => {
 
 exports.checkAdminToken = (token, callback) => {
     jwt.verify(token, config.secret, (err, decoded) => {
+        if (!decoded.isAdmin) {
+            return callback({message: 'Forbidden role.'}, null);
+        }
         if (err) {
             return callback(err, null);
         }

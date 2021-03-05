@@ -22,7 +22,7 @@ app.use('/api/user/notes', bodyParser.json(), auth.verifyUserToken, notes);
 app.use('/api/user/health_params', auth.verifyUserToken, healthParams);
 app.use('/api/admin', bodyParser.json(), auth.verifyAdminToken, admin);
 
-app.use('/api/admin/login', bodyParser.json(), auth.loginAdmin);
+app.use('/api/administrator/login', bodyParser.json(), auth.loginAdmin);
 app.use('/api/user/login', bodyParser.json(), auth.loginUser);
 
 const port = process.env.PORT || 8080;
@@ -38,25 +38,3 @@ socket.listen(http, {
     },
     path: "/socket"
 });
-
-/**
-const io = require("socket.io-client");
-
-const client = io("http://localhost:8080/customer", {
-    auth: {
-        token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNDE4ZjAxNGI4MzRiMjk3NzZmZTlmOSIsInVzZXJuYW1lIjoiKzM4MDk5NzA5OTM1NyIsImN1c3RvbUlkIjoiTVlfQ1VTVE9NX0lEIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTYxNDk3MzMxNywiZXhwIjoxNjE1MDU5NzE3fQ.fSq_wfP2fiq8bn18_88GvNoDSlAqPOOk6UwqW2Lvtto"
-    },
-    reconnectionDelayMax: 2000,
-    path: "/socket",
-    reconnect: true
-});
-setInterval(() => {client.emit("monitor", { heartRate: 200 });}, 5000);
-client.on('connect_failed', function(){
-    console.log('Connection Failed');
-});
-client.on('connect', function(socket){
-    console.log('Connected ' + socket);
-});
-client.on('disconnect', function () {
-    console.log('Disconnected');
-});**/

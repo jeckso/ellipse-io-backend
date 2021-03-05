@@ -5,8 +5,7 @@ const schema = mongoose.Schema({
         required: [true, 'Heart rate is required']
     },
     userCustomId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         index: true,
         required: [true, 'Reference to user custom id is obligatory'],
     },

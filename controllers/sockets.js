@@ -7,6 +7,7 @@ const server = new io.Server();
 // Adding authorization
 server.of("/admin").use((socket, next) => {
     let token = socket.handshake.auth.token;
+
     if (!token) {
         next({data: "Not authorized"});
         return socket.disconnect(true);
@@ -19,6 +20,7 @@ server.of("/admin").use((socket, next) => {
         next({data: "Not authorized"});
         return socket.disconnect(true);
     }
+
     auth.checkAdminToken(token, (err, admin) => {
         if (err) {
             next({data: err});
@@ -28,24 +30,20 @@ server.of("/admin").use((socket, next) => {
         }
     });
 }).use((socket, next) => {
-    let userId = socket.handshake.query;
+    let userId = socket.handshake.query.userId;
     if (!userId) {
         next({data: "No user found quried"});
         socket.disconnect(true);
     } else {
-        socket.userId = query.userId
+        socket.userId = userId
         next();
     }
 }).on("connection", (socket) => {
-    console.log("SOCKET= " + socket.id);
     socket.join(socket.userId);
-}).on("connect_error", (err) => {
-    console.log(err.message); // prints the message associated with the error
-});
+})
 
 server.of("/customer").use((socket, next) => {
     let token = socket.handshake.auth.token;
-    console.log("token= " + token);
     if (!token) {
         next({data: "Not authorized"});
         return socket.disconnect(true);
@@ -63,7 +61,7 @@ server.of("/customer").use((socket, next) => {
             next({data: err});
             socket.disconnect(true)
         } else {
-            socket.userId = user._id;
+            socket.userId = user.customId;
             next();
         }
     });
@@ -73,11 +71,9 @@ server.of("/customer").use((socket, next) => {
         health_params.createParameter(
             user,
             message.heartRate, (err, param) => {
-                console.log("Param " + param + "Error " + err);
                 server.of("/admin").to(user).emit("params", param);
             }
         )
-
     });
 });
 module.exports = server;

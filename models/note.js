@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const schema = mongoose.Schema({
     userCustomId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
         index: true,
         required: [true, 'A note must have a reference to user'],
     },
