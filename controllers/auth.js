@@ -24,7 +24,7 @@ exports.loginAdmin = (req, res) => {
             let token = jwt.sign(payload, config.secret, {expiresIn: 86400});
             res.status(200).send({'authorizationToken': token});
         } else {
-            res.status(500).send({message: "Unknown error"});
+            res.status(500).send({"message": "Unknown error"});
         }
     })
 };
@@ -51,7 +51,7 @@ exports.loginUser = (req, res) => {
             let token = jwt.sign(payload, config.secret, {expiresIn: 86400});
             res.status(200).send({'authorizationToken': token});
         } else {
-            res.status(500).send({message: "Unknown error"});
+            res.status(500).send({"message": "Unknown error"});
         }
     })
 };
@@ -59,28 +59,23 @@ exports.loginUser = (req, res) => {
 exports.verifyAdminToken = (req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization']; // Express headers are auto converted to lowercase
     if (!token)
-        return res.status(403).send({auth: false, message: 'No token provided.'});
+        return res.status(403).send({"message": 'No token provided.'});
     if (token.startsWith('Bearer ')) {
         // Remove Bearer from string
         token = token.slice(7, token.length);
     }
     if (!token) {
-        return res.status(403).send({auth: false, message: 'No token provided.'});
+        return res.status(403).send({"message": 'No token provided.'});
     }
     if (!decoded.isAdmin) {
         return res.status(403).send({auth: false, message: 'Forbidden role.'});
     }
-    jwt.verify(token, config.secret, function (err, decoded) {
+    exports.checkAdminToken(token, (err, admin) => {
         if (err) {
-            return res.status(500).send({"message": 'Failed to authenticate token.'});
+            return res.status(401).send({"message": 'Failed to authenticate user.'});
+        } else {
+            next();
         }
-        admin.findAdminById(decoded.id, err => {
-            if (err) {
-                return res.status(500).send(err);
-            } else {
-                next();
-            }
-        });
     });
 }
 
@@ -95,20 +90,44 @@ exports.verifyUserToken = (req, res, next) => {
     if (!token) {
         return res.status(401).send({"message": 'Unauthorized'});
     }
-
-    jwt.verify(token, config.secret, function (err, decoded) {
+    exports.checkUserToken(token, (err, user) => {
         if (err) {
-            return res.status(500).send({"message": 'Failed to authenticate token.'});
+            return res.status(401).send({"message": 'Failed to authenticate user.'});
+        } else {
+            next();
         }
-        users.findUserById(decoded.id, err => {
+    });
+}
+
+exports.checkUserToken = (token, callback) => {
+    jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+            return callback(err, null);
+        }
+        users.findUserById(decoded.id, (err, user) => {
             if (err) {
-                return res.status(500).send(err);
+                callback(err, null);
             } else {
-                next();
+                callback(null, user);
             }
         });
     });
-}
+};
+
+exports.checkAdminToken = (token, callback) => {
+    jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+            return callback(err, null);
+        }
+        admin.findAdminById(decoded.id, (err, user) => {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, user);
+            }
+        });
+    });
+};
 
 exports.parsePayload = (token) => {
     let base64Url = token.split('.')[1];

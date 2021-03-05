@@ -12,3 +12,5 @@ router.post("/", (req, res) => {
         else res.status(201).send(note)
     });
 });
+
+module.exports = router;

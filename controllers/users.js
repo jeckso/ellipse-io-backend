@@ -37,15 +37,12 @@ exports.deleteUserById = (id, callback) => {
 
 exports.login = (phone, password, callback) => {
     exports.findUserByPhone(phone, (error, user) => {
-        console.log("PHONE " + phone)
         if (error) {
             return callback(error, null)
         }
         if (bcrypt.compareSync(password, user.password)) {
-            console.log("MATCHED " + password + " " + user.password)
             callback(null, user)
         } else {
-            console.log("NOT MATCHED " + password + " " + user.password)
             callback(new mongoose.Error.ValidatorError({message: "Irregular username or password"}), null)
         }
     });
