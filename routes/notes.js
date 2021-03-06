@@ -9,7 +9,7 @@ router.use(bodyParser.json());
 router.post("/", (req, res) => {
     notes.createNote(auth.receivePayload(req).customId, req.body, (err, note) => {
         if (err) res.status(400).send(err);
-        else res.status(201).send(note)
+        else res.status(201).send(note);
     })
 });
 
@@ -22,8 +22,13 @@ router.patch("/:id", (req, res) => {
         return res.status(400).send({"message": "Only admin can change id of user"});
     }
     notes.updateNote(id, req.body, (err, note) => {
-        if (err) res.status(500).send(err);
-        else res.status(200).send(note)
+        if (err) {
+            res.status(500).send(err);
+        } else if (note) {
+            res.status(200).send(note);
+        } else  {
+            res.status(404).send({ "message": "Not found" });
+        }
     })
 });
 
@@ -33,8 +38,13 @@ router.delete("/:id", (req, res) => {
         res.status(400).send({"message": "Delete could not work without id"});
     }
     notes.deleteNoteById(id, (err, note) => {
-        if (err) res.status(500).send(err);
-        else res.status(200).send(note)
+        if (err) {
+            res.status(500).send(err);
+        } else if (note) {
+            res.status(200).send(note);
+        } else  {
+            res.status(404).send({ "message": "Not found" });
+        }
     })
 });
 
@@ -54,7 +64,7 @@ router.get("/", (req, res) => {
         perPage,
         (err, note) => {
             if (err) res.status(500).send(err);
-            else res.status(200).send(note)
+            else res.status(200).send(note);
         })
 });
 
@@ -64,8 +74,13 @@ router.get("/:id", (req, res) => {
         res.status(400).send({"message": "Delete could not work without id"});
     }
     notes.getNoteById(id, (err, note) => {
-        if (err) res.status(500).send(err);
-        else res.status(200).send(note)
+        if (err) {
+            res.status(500).send(err);
+        } else if (note) {
+            res.status(200).send(note);
+        } else  {
+            res.status(404).send({ "message": "Not found" });
+        }
     })
 });
 

@@ -113,11 +113,11 @@ exports.checkUserToken = (token, callback) => {
 
 exports.checkAdminToken = (token, callback) => {
     jwt.verify(token, config.secret, (err, decoded) => {
-        if (!decoded.isAdmin) {
-            return callback({message: 'Forbidden role.'}, null);
-        }
         if (err) {
             return callback(err, null);
+        }
+        if (!decoded.isAdmin) {
+            return callback({message: 'Forbidden role.'}, null);
         }
         admin.findAdminById(decoded.id, (err, user) => {
             if (err) {
@@ -143,7 +143,6 @@ exports.receivePayload = (req) => {
     try {
         return exports.parsePayload(token);
     } catch (e) {
-        console.log(e);
         return {}
     }
 }

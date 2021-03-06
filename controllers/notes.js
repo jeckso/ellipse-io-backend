@@ -14,7 +14,9 @@ exports.getNoteById = (id, callback) => {
 
 exports.getAllNotes = (customUserId, title, content, offset, limit, callback) => {
     let conditions = {};
-    conditions.userCustomId = customUserId;
+    if (customUserId) {
+        conditions.userCustomId = customUserId;
+    }
     if (title) {
         conditions.title = {"$regex": title, "$options": "i"}
     }

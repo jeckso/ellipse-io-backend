@@ -9,7 +9,7 @@ router.use(bodyParser.json());
 router.post("/", (req, res) => {
     healthParams.createParameter(auth.receivePayload(req).customId, req.body.heartRate, (err, note) => {
         if (err) res.status(400).send(err);
-        else res.status(201).send(note)
+        else res.status(201).send(note);
     });
 });
 

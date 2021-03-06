@@ -9,10 +9,10 @@ exports.createParameter = (customUserId, heartRate, callback) => {
     parameter.save(callback);
 };
 
-exports.getAllParameters = (userId, fromDate, toDate, offset, limit, callback) => {
+exports.getAllParameters = (userCustomId, fromDate, toDate, offset, limit, callback) => {
     let condition = {};
-    if (userId) {
-        condition.userId = userId;
+    if (userCustomId) {
+        condition.userCustomId = userCustomId;
     }
     if (fromDate) {
         if (!condition.createDate) {
@@ -24,7 +24,7 @@ exports.getAllParameters = (userId, fromDate, toDate, offset, limit, callback) =
         if (!condition.createDate) {
             condition.createDate = {};
         }
-        condition.createDate.$lt =  toDate;
+        condition.createDate.$lt = toDate;
     }
     HealthParameter.find(condition, {}, {skip: offset, limit: limit}, callback);
 };

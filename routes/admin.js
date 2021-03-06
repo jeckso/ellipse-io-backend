@@ -15,11 +15,11 @@ router.get('/notes', (req, res) => {
         query.customUserId,
         query.title,
         query.content,
-        perPage,
         (page - 1) * perPage,
+        perPage,
         (err, notes) => {
             if (err) res.status(500).send(err);
-            else res.status(200).send(notes)
+            else res.status(200).send(notes);
         }
     )
 });
@@ -29,14 +29,14 @@ router.get("/health_params", (req, res) => {
     let page = parseInt(query.page) || 1;
     let perPage = parseInt(query.perPage) || 20;
     params.getAllParameters(
-        query.userId,
+        query.userCustomId,
         query.fromDate,
         query.toDate,
-        perPage,
         (page - 1) * perPage,
+        perPage,
         (err, notes) => {
             if (err) res.status(500).send(err);
-            else res.status(200).send(notes)
+            else res.status(200).send(notes);
         });
 });
 
